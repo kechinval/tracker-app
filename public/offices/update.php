@@ -1,0 +1,31 @@
+<?php
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Repository\SqlOfficesRepository;
+
+include '../templates/header.php'
+
+?>
+
+<form action="../../app/Services/OfficesService.php" method="POST">
+    <?php
+    $result = SqlOfficesRepository::getById($_GET['id']);
+    $row = $result->fetch_assoc();?>
+    <input type="hidden" class="form-control" id="id" name="id"
+           value="<?= $_GET['id'] ?>">
+    <div class="form-group">
+        <label for="address">Адрес</label>
+        <input type="text" class="form-control" id="address" name="address" aria-describedby="address"
+               value="<?= $row['address'] ?>">
+    </div>
+    <div class="form-group">
+        <label for="numbers_of_workspaces">Количество рабочих мест</label>
+        <input type="text" class="form-control" id="numbers_of_workspaces" name="numbers_of_workspaces"
+               value="<?= $row['numbers_of_workspaces'] ?>">
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+        <button type="submit" name="update" class="btn btn-primary">Изменить</button>
+    </div>
+</form>
+</body>
+</html>
