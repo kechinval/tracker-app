@@ -31,10 +31,6 @@ switch (true){
             $_SESSION['id'] = $user['id'];
             $_SESSION['session'] = md5($user['username']);
 
-//            echo $_SESSION['id'];
-
-//            echo $_SESSION['session'];
-//            setcookie("cookie", md5($user['username']), time() + 3600, '/');
             header("Location: ../../public/staff/index.php");
         } else {
             header("Location: /public/index.php?error=Wrong username or password");
