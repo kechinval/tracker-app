@@ -30,10 +30,12 @@ include '../templates/header.php'
         </thead>
         <tbody>
         <?php
-        $staff = SqlStaffRepository::get();
+        $SqlStaffRepository = new SqlStaffRepository();
+        $staff = $SqlStaffRepository->get();
         if ($staff) {
             while ($row = $staff->fetch_assoc()) {
-                $office = SqlOfficesRepository::getById($row['office_id']);
+                $SqlOfficesRepository = new SqlOfficesRepository();
+                $office = $SqlOfficesRepository->getById($row['office_id']);
                 $off = $office->fetch_assoc()?>
                 <tr>
                     <th scope="row"><?= $row['id'] ?></th>
@@ -56,6 +58,3 @@ include '../templates/header.php'
         } ?>
         </tbody>
     </table>
-</div>
-</body>
-</html>

@@ -17,5 +17,3 @@ include '../templates/header.php'
         <button type="submit" name="create" class="btn btn-primary">Создать</button>
     </div>
 </form>
-</body>
-</html>

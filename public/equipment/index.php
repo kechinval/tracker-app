@@ -2,6 +2,8 @@
 require __DIR__ . '/../../vendor/autoload.php';
 
 use App\Repository\SqlEquipmentRepository;
+use App\Repository\SqlStaffRepository;
+use App\Repository\SqlOfficesRepository;
 
 include '../templates/header.php'
 
@@ -29,13 +31,19 @@ include '../templates/header.php'
         </thead>
         <tbody>
         <?php
-        $result = SqlEquipmentRepository::get();
-        if ($result) {
-            while ($row = $result->fetch_assoc()) { ?>
+        $SqlEquipmentRepository = new SqlEquipmentRepository();
+        $equipment = $SqlEquipmentRepository->get();
+        if ($equipment) {
+            while ($row = $equipment->fetch_assoc()) {
+                $SqlStaffRepository = new SqlStaffRepository();
+                $staff = $SqlStaffRepository->getById($row['staff_id'])->fetch_assoc();
+                $SqlOfficesRepository = new SqlOfficesRepository();
+                $office = $SqlOfficesRepository->getById($row['office_id'])->fetch_assoc();
+                ?>
                 <tr>
                     <th scope="row"><?= $row['id'] ?></th>
-                    <td><?= $row['staff_id'] ?></td>
-                    <td><?= $row['office_id'] ?></td>
+                    <td><?= $staff['lastname'] ?></td>
+                    <td><?= $office['address'] ?></td>
                     <td><?= $row['invNo'] ?></td>
                     <td><?= $row['specs'] ?></td>
                     <td><?= $row['equipment_status'] ?></td>
@@ -53,6 +61,3 @@ include '../templates/header.php'
         } ?>
         </tbody>
     </table>
-</div>
-</body>
-</html>

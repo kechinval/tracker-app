@@ -5,8 +5,11 @@ use App\Repository\SqlEquipmentRepository;
 use App\Repository\SqlOfficesRepository;
 use App\Repository\SqlStaffRepository;
 
-include '../templates/header.php'
+include '../templates/header.php';
 
+$SqlEquipmentRepository = new SqlEquipmentRepository();
+$SqlOfficesRepository = new SqlOfficesRepository();
+$SqlStaffRepository = new SqlStaffRepository();
 ?>
 
 <form action="../../app/Services/EquipmentService.php" method="POST">
@@ -22,7 +25,7 @@ include '../templates/header.php'
         <label for="equipment_status">Статус оборудования</label>
         <select id="equipment_status" name="equipment_status" class="form-control">
             <?php
-            $result = SqlEquipmentRepository::getEnum('equipment_status');
+            $result = $SqlEquipmentRepository->getEnum('equipment_status');
             foreach ($result as $row) { ?>
                 <option value="<?= $row ?>"><?= $row ?></option>
             <?php } ?>
@@ -32,7 +35,7 @@ include '../templates/header.php'
         <label for="movement_status">Статус перемещения</label>
         <select id="movement_status" name="movement_status" class="form-control">
             <?php
-            $result = SqlEquipmentRepository::getEnum('movement_status');
+            $result = $SqlEquipmentRepository->getEnum('movement_status');
             foreach ($result as $row) { ?>
                 <option value="<?= $row ?>"><?= $row ?></option>
             <?php } ?>
@@ -42,7 +45,7 @@ include '../templates/header.php'
         <label for="staff_id">Сотрудник</label>
         <select id="staff_id" name="staff_id" class="form-control">
             <?php
-            $result = SqlStaffRepository::get();
+            $result = $SqlStaffRepository->get();
             if ($result) {
                 while ($row = $result->fetch_assoc()) { ?>
                     <option value="<?= $row['id'] ?>"><?= $row['lastname'] ?></option>
@@ -54,7 +57,7 @@ include '../templates/header.php'
         <label for="office_id">Офис</label>
         <select id="office_id" name="office_id" class="form-control">
             <?php
-            $result = SqlOfficesRepository::get();
+            $result = $SqlOfficesRepository->get();
             if ($result) {
                 while ($row = $result->fetch_assoc()) { ?>
                     <option value="<?= $row['id'] ?>"><?= $row['address'] ?></option>
@@ -66,5 +69,3 @@ include '../templates/header.php'
         <button type="submit" name="create" class="btn btn-primary">Создать</button>
     </div>
 </form>
-</body>
-</html>

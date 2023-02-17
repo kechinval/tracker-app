@@ -26,9 +26,10 @@ include '../templates/header.php'
         </thead>
         <tbody>
         <?php
-        $result = SqlOfficesRepository::get();
-        if ($result) {
-            while ($row = $result->fetch_assoc()) { ?>
+        $SqlOfficesRepository = new SqlOfficesRepository();
+        $offices = $SqlOfficesRepository->get();
+        if ($offices) {
+            while ($row = $offices->fetch_assoc()) { ?>
                 <tr>
                     <th scope="row"><?= $row['id'] ?></th>
                     <td><?= $row['address'] ?></td>
@@ -46,6 +47,3 @@ include '../templates/header.php'
         } ?>
         </tbody>
     </table>
-</div>
-</body>
-</html>

@@ -7,33 +7,35 @@ use App\Repository\Interfaces\RepositoryInterface;
 
 class SqlOfficesRepository implements RepositoryInterface
 {
-    public static function get(){
-        $db = new Database();
-        return $db->select('offices');
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = new Database();
     }
 
-    public static function getById($id)
-    {
-        $db = new Database();
-        return $db->select('offices', '*', 'id='.$id);
+    public function get(){
+        return $this->db->select('offices');
     }
 
-    public static function save($data): void
+    public function getById($id)
     {
-        $db = new Database();
-        $db->insert('offices', $data);
+        return $this->db->select('offices', '*', 'id='.$id);
     }
 
-    public static function update($data): void
+    public function save($data): void
     {
-        $db = new Database();
+        $this->db->insert('offices', $data);
+    }
+
+    public function update($data): void
+    {
         $set = 'address="'.$data['address'] . '", numbers_of_workspaces='.$data['numbers_of_workspaces'];
-        $db->update('offices', $set, 'id='.$data['id']);
+        $this->db->update('offices', $set, 'id='.$data['id']);
     }
 
-    public static function delete($id): void
+    public function delete($id): void
     {
-        $db = new Database();
-        $db->delete('offices', 'id='.$id);
+        $this->db->delete('offices', 'id='.$id);
     }
 }

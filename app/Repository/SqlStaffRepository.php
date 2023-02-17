@@ -8,38 +8,40 @@ use App\Models\Staff;
 
 class SqlStaffRepository implements RepositoryInterface{
 
-    public static function get(){
-        $db = new Database();
-        return $db->select('staff');
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = new Database();
     }
 
-    public static function getById($id)
-    {
-        $db = new Database();
-        return $db->select('staff', '*', 'id='.$id);
+    public function get(){
+        return $this->db->select('staff');
     }
 
-    public static function save($data): void
+    public function getById($id)
     {
-        $db = new Database();
-        $db->insert('staff', $data);
+        return $this->db->select('staff', '*', 'id='.$id);
     }
 
-    public static function update($data): void
+    public function save($data): void
     {
-        $db = new Database();
+        $this->db->insert('staff', $data);
+    }
+
+    public function update($data): void
+    {
         $set = 'office_id=' . $data['office_id'] .
                ', username="' . $data['username'] .
                '", email="' . $data['email'] .
                '", firstname="' . $data['firstname'] .
                '", middlename="' . $data['middlename'] .
                '", lastname="' . $data['lastname'] . '"';
-        $db->update('staff', $set, 'id='.$data['id']);
+        $this->db->update('staff', $set, 'id='.$data['id']);
     }
 
-    public static function delete($id): void
+    public function delete($id): void
     {
-        $db = new Database();
-        $db->delete('staff', 'id='.$id);
+        $this->db->delete('staff', 'id='.$id);
     }
 }

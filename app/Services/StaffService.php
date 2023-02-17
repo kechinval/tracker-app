@@ -4,6 +4,8 @@ require_once __DIR__.'/../../vendor/autoload.php';
 
 use App\Repository\SqlStaffRepository;
 
+$SqlStaffRepository = new SqlStaffRepository();
+
 switch (true)
 {
     case (isset($_POST['create'])):
@@ -15,8 +17,9 @@ switch (true)
             $_POST['firstname'],
             $_POST['middlename'],
             $_POST['lastname']);
-        SqlStaffRepository::save($data);
-        return header("Location: ../../public/staff/index.php?success=Created");
+        $SqlStaffRepository->save($data);
+        header("Location: ../../public/staff/index.php?success=Created");
+        break;
     case (isset($_POST['update'])):
         $data = array(
             'id' => $_POST['id'],
@@ -27,9 +30,11 @@ switch (true)
             'firstname' => $_POST['firstname'],
             'middlename' => $_POST['middlename'],
             'lastname' => $_POST['lastname']);
-        SqlStaffRepository::update($data);
-        return header("Location: ../../public/staff/index.php?success=Updated");
+        $SqlStaffRepository->update($data);
+        header("Location: ../../public/staff/index.php?success=Updated");
+        break;
     case (isset($_POST['delete'])):
-        SqlStaffRepository::delete($_GET['id']);
-        return header("Location: ../../public/staff/index.php?success=Deleted");
+        $SqlStaffRepository->delete($_GET['id']);
+        header("Location: ../../public/staff/index.php?success=Deleted");
+        break;
 }

@@ -35,9 +35,10 @@ include '../templates/header.php'
         <label for="office_id">Офис</label>
         <select id="office_id" name="office_id" class="form-control">
             <?php
-            $result = SqlOfficesRepository::get();
-            if ($result) {
-                while ($row = $result->fetch_assoc()) { ?>
+            $SqlOfficesRepository = new SqlOfficesRepository();
+            $office = $SqlOfficesRepository->get();
+            if ($office) {
+                while ($row = $office->fetch_assoc()) { ?>
                     <option value="<?= $row['id'] ?>"><?= $row['address'] ?></option>
                 <?php }
             } ?>
@@ -47,5 +48,3 @@ include '../templates/header.php'
         <button type="submit" name="create" class="btn btn-primary">Создать</button>
     </div>
 </form>
-</body>
-</html>

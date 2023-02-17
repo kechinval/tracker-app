@@ -46,10 +46,11 @@ use App\Repository\SqlOfficesRepository;
         <label for="office_id">Офис</label>
         <select id="office_id" name="office_id" class="form-control">
             <?php
-            $result = SqlOfficesRepository::get();
-            if ($result) {
-                while ($row = $result->fetch_assoc()) { ?>
-                    <option value="<?= $row['id'] ?>"><?= $row['address'] ?></option>
+            $SqlOfficesRepository = new SqlOfficesRepository();
+            $offices = $SqlOfficesRepository->get();
+            if ($offices) {
+                while ($office = $offices->fetch_assoc()) { ?>
+                    <option value="<?= $office['id'] ?>"><?= $office['address'] ?></option>
                 <?php }
             } ?>
         </select>

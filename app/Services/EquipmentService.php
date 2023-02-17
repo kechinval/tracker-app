@@ -4,6 +4,8 @@ require_once __DIR__.'/../../vendor/autoload.php';
 
 use App\Repository\SqlEquipmentRepository;
 
+$SqlEquipmentRepository = new SqlEquipmentRepository();
+
 switch (true)
 {
     case (isset($_POST['create'])):
@@ -15,8 +17,9 @@ switch (true)
             $_POST['equipment_status'],
             $_POST['movement_status']
         );
-        SqlEquipmentRepository::save($data);
-        return header("Location: ../../public/equipment/index.php?success=Created");
+        $SqlEquipmentRepository->save($data);
+        header("Location: ../../public/equipment/index.php?success=Created");
+        break;
     case (isset($_POST['update'])):
         $data = array(
             'id' => $_POST['id'],
@@ -27,9 +30,11 @@ switch (true)
             'equipment_status' => $_POST['equipment_status'],
             'movement_status' => $_POST['movement_status']
         );
-        SqlEquipmentRepository::update($data);
-        return header("Location: ../../public/equipment/index.php?success=Updated");
+        $SqlEquipmentRepository->update($data);
+        header("Location: ../../public/equipment/index.php?success=Updated");
+        break;
     case (isset($_POST['delete'])):
-        SqlEquipmentRepository::delete($_GET['id']);
-        return header("Location: ../../public/equipment/index.php?success=Deleted");
+        $SqlEquipmentRepository->delete($_GET['id']);
+        header("Location: ../../public/equipment/index.php?success=Deleted");
+        break;
 }

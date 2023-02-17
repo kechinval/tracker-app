@@ -5,9 +5,10 @@ require_once __DIR__.'/../../vendor/autoload.php';
 use App\Repository\SqlStaffRepository;
 use App\Database\Database;
 
+$SqlStaffRepository = new SqlStaffRepository();
+
 switch (true){
     case (isset($_POST['register'])):
-        $password = md5($_POST['password']);
         $data = array(
             $_POST['office_id'],
             $_POST['username'],
@@ -16,11 +17,11 @@ switch (true){
             $_POST['firstname'],
             $_POST['middlename'],
             $_POST['lastname']);
-        SqlStaffRepository::save($data);
-        header("Location: ../../public/staff/index.php?success=Created");
+        $SqlStaffRepository->save($data);
+        header("Location: ../../public/index.php");
+        break;
     case (isset($_POST['login'])):
         $db = new Database();
-        $password = md5($_POST['password']);
         $res = $db->select(
             'staff',
             '*',
@@ -30,7 +31,6 @@ switch (true){
             session_start();
             $_SESSION['id'] = $user['id'];
             $_SESSION['session'] = md5($user['username']);
-
             header("Location: ../../public/staff/index.php");
         } else {
             header("Location: /public/index.php?error=Wrong username or password");
