@@ -17,7 +17,7 @@ switch (true){
             $_POST['middlename'],
             $_POST['lastname']);
         SqlStaffRepository::save($data);
-        return header("Location: ../../public/staff/index.php?success=Created");
+        header("Location: ../../public/staff/index.php?success=Created");
     case (isset($_POST['login'])):
         $db = new Database();
         $password = md5($_POST['password']);
@@ -27,14 +27,22 @@ switch (true){
             'username="'.$_POST['username'] . '" AND password="' . md5($_POST['password']) .'"' );
         $user = $res->fetch_assoc();
         if ($user) {
-            setcookie("id", $user['id'], time() + 3600, '/');
-            setcookie("cookie", md5($user['username']), time() + 3600, '/');
-            return header("Location: ../../public/staff/index.php");
+            session_start();
+            $_SESSION['id'] = $user['id'];
+            $_SESSION['session'] = md5($user['username']);
+
+//            echo $_SESSION['id'];
+
+//            echo $_SESSION['session'];
+//            setcookie("cookie", md5($user['username']), time() + 3600, '/');
+            header("Location: ../../public/staff/index.php");
         } else {
-            return header("Location: /public/index.php?error=Wrong username or password");
+            header("Location: /public/index.php?error=Wrong username or password");
         }
+        break;
     case (isset($_POST['logout'])):
-        setcookie("id", '', time() - 3600, '/');
-        setcookie("cookie", '', time() - 3600, '/');
-        return header("Location: /public/index.php");
+        session_start();
+        session_destroy();
+        header("Location: /public/index.php");
+        break;
 }

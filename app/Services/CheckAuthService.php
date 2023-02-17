@@ -2,12 +2,14 @@
 
 use App\Database\Database;
 
-if (isset($_COOKIE['id']) and isset($_COOKIE['cookie'])){
+session_start();
+
+if (isset($_SESSION['id']) && isset($_SESSION['session'])){
     $db = new Database();
-    $res = $db->select('staff', '*', $_COOKIE['id']);
+    $res = $db->select('staff', '*', $_SESSION['id']);
     $user = $res->fetch_assoc();
 
-    if(!md5($user['username'] === $_COOKIE['cookie'])){
+    if(!md5($user['username'] === $_SESSION['session'])){
         header("Location: /public/index.php");
         exit();
     }
