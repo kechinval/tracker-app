@@ -3,9 +3,10 @@
 namespace App\Repository;
 
 use App\Database\Database;
-use App\Repository\Interfaces\RepositoryInterface;
+use App\Repository\Interfaces\OfficesRepositoryInterface;
+use App\Models\Office;
 
-class SqlOfficesRepository implements RepositoryInterface
+class SqlOfficesRepository implements OfficesRepositoryInterface
 {
     private $db;
 
@@ -23,15 +24,19 @@ class SqlOfficesRepository implements RepositoryInterface
         return $this->db->select('offices', '*', 'id='.$id);
     }
 
-    public function save($data): void
+    public function save(Office $data): void
     {
-        $this->db->insert('offices', $data);
+        $office = array(
+          'address' => $data->address,
+          'numbers_of_workspaces' => $data->numbers_of_workspaces
+        );
+        $this->db->insert('offices', $office);
     }
 
-    public function update($data): void
+    public function update(Office $data): void
     {
-        $set = 'address="'.$data['address'] . '", numbers_of_workspaces='.$data['numbers_of_workspaces'];
-        $this->db->update('offices', $set, 'id='.$data['id']);
+        $set = 'address="'.$data->address . '", numbers_of_workspaces='.$data->numbers_of_workspaces;
+        $this->db->update('offices', $set, 'id='.$data->id);
     }
 
     public function delete($id): void

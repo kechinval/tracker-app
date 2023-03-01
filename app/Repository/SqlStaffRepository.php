@@ -2,11 +2,11 @@
 
 namespace App\Repository;
 
-use App\Repository\Interfaces\RepositoryInterface;
+use App\Repository\Interfaces\StaffRepositoryInterface;
 use App\Database\Database;
 use App\Models\Staff;
 
-class SqlStaffRepository implements RepositoryInterface{
+class SqlStaffRepository implements StaffRepositoryInterface{
 
     private $db;
 
@@ -24,20 +24,30 @@ class SqlStaffRepository implements RepositoryInterface{
         return $this->db->select('staff', '*', 'id='.$id);
     }
 
-    public function save($data): void
+    public function save(Staff $data): void
     {
-        $this->db->insert('staff', $data);
+        $staff = array(
+          'office_id' => $data->office_id,
+          'username' => $data->username,
+          'email' => $data->email,
+          'password' => $data->password,
+          'firstname' => $data->firstname,
+          'middlename' => $data->middlename,
+          'lastname' => $data->lastname
+        );
+        $this->db->insert('staff', $staff);
     }
 
-    public function update($data): void
+    public function update(Staff $data): void
     {
-        $set = 'office_id=' . $data['office_id'] .
-               ', username="' . $data['username'] .
-               '", email="' . $data['email'] .
-               '", firstname="' . $data['firstname'] .
-               '", middlename="' . $data['middlename'] .
-               '", lastname="' . $data['lastname'] . '"';
-        $this->db->update('staff', $set, 'id='.$data['id']);
+        $set = 'office_id=' . $data->office_id .
+               ', username="' . $data->username .
+               '", email="' . $data->email .
+               '", password=" ' . $data->password .
+               '", firstname="' . $data->firstname .
+               '", middlename="' . $data->middlename .
+               '", lastname="' . $data->lastname . '"';
+        $this->db->update('staff', $set, 'id='.$data->id);
     }
 
     public function delete($id): void

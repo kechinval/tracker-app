@@ -3,9 +3,10 @@
 namespace App\Repository;
 
 use App\Database\Database;
-use App\Repository\Interfaces\RepositoryInterface;
+use App\Models\Equipment;
+use App\Repository\Interfaces\EquipmentRepositoryInterface;
 
-class SqlEquipmentRepository implements RepositoryInterface
+class SqlEquipmentRepository implements EquipmentRepositoryInterface
 {
     private $db;
 
@@ -34,21 +35,29 @@ class SqlEquipmentRepository implements RepositoryInterface
         return $this->db->select('equipment', '*', 'id='.$id);
     }
 
-    public function save($data): void
+    public function save(Equipment $data): void
     {
-        $this->db->insert('equipment', $data);
+        $equipment = array(
+          'staff_id' => $data->staff_id,
+          'office_id' => $data->office_id,
+          'invNo' => $data->invNO,
+          'specs' => $data->specs,
+          'equipment_status' => $data->equipment_status,
+          'movement_status' => $data->movement_status
+        );
+        $this->db->insert('equipment', $equipment);
     }
 
     public function update($data): void
     {
         $set =
-            'staff_id=' . $data['staff_id'] .
-            ', office_id=' . $data['office_id'] .
-            ', invNo="' . $data['invNo'] .
-            '", specs="' . $data['specs'] .
-            '", equipment_status="' . $data['equipment_status'] .
-            '", movement_status="' . $data['movement_status'] . '"';
-        $this->db->update('equipment', $set, 'id='.$data['id']);
+            'staff_id=' . $data->staff_id .
+            ', office_id=' . $data->office_id .
+            ', invNo="' . $data->invNO .
+            '", specs="' . $data->specs .
+            '", equipment_status="' . $data->equipment_status .
+            '", movement_status="' . $data->movement_status . '"';
+        $this->db->update('equipment', $set, 'id='.$data->id);
     }
 
     public function delete($id): void
