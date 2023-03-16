@@ -10,9 +10,9 @@ interface StaffRepositoryInterface
 
     public function getById($id);
 
-    public function save(Staff $data): void;
+    public function save(Staff $staff): void;
 
-    public function update(Staff $data): void;
+    public function update(Staff $staff): void;
 
     public function delete($id): void;
 }

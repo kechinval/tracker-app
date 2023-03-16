@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Core\Collection;
 use App\Database\Database;
 use App\Models\Equipment;
 use App\Repository\Interfaces\EquipmentRepositoryInterface;
@@ -15,7 +16,16 @@ class SqlEquipmentRepository implements EquipmentRepositoryInterface
 }
 
     public function get(){
-        return $this->db->select('equipment');
+        $array = [];
+        $sql_result = $this->db->select('equipment');
+
+        while ($row = $sql_result->fetch_assoc()) {
+            $equipment = new Equipment();
+            $equipment->loadData($row);
+            $array[] = $equipment;
+        }
+
+        return Collection::make($array);
     }
 
     public function getEnum($column){
@@ -32,7 +42,9 @@ class SqlEquipmentRepository implements EquipmentRepositoryInterface
 
     public function getById($id)
     {
-        return $this->db->select('equipment', '*', 'id='.$id);
+        $equipment = new Equipment();
+        $equipment->loadData($this->db->select('equipment', '*', 'id='.$id)->fetch_assoc());
+        return $equipment;
     }
 
     public function save(Equipment $data): void
@@ -40,7 +52,7 @@ class SqlEquipmentRepository implements EquipmentRepositoryInterface
         $equipment = array(
           'staff_id' => $data->staff_id,
           'office_id' => $data->office_id,
-          'invNo' => $data->invNO,
+          'invNo' => $data->invNo,
           'specs' => $data->specs,
           'equipment_status' => $data->equipment_status,
           'movement_status' => $data->movement_status
@@ -50,10 +62,11 @@ class SqlEquipmentRepository implements EquipmentRepositoryInterface
 
     public function update($data): void
     {
+        //TODO update
         $set =
             'staff_id=' . $data->staff_id .
             ', office_id=' . $data->office_id .
-            ', invNo="' . $data->invNO .
+            ', invNo="' . $data->invNo .
             '", specs="' . $data->specs .
             '", equipment_status="' . $data->equipment_status .
             '", movement_status="' . $data->movement_status . '"';

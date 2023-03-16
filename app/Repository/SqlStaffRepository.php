@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Core\Collection;
 use App\Repository\Interfaces\StaffRepositoryInterface;
 use App\Database\Database;
 use App\Models\Staff;
@@ -16,38 +17,50 @@ class SqlStaffRepository implements StaffRepositoryInterface{
     }
 
     public function get(){
-        return $this->db->select('staff');
+        $array = [];
+        $sql_result = $this->db->select('staff');
+
+        while ($row = $sql_result->fetch_assoc()) {
+            $staff = new Staff();
+            $staff->loadData($row);
+            $array[] = $staff;
+        }
+
+        return Collection::make($array);
     }
 
     public function getById($id)
     {
-        return $this->db->select('staff', '*', 'id='.$id);
+        $staff = new Staff();
+        $staff->loadData($this->db->select('staff', '*', 'id='.$id)->fetch_assoc());
+        return $staff;
     }
 
-    public function save(Staff $data): void
+    public function save(Staff $staff): void
     {
-        $staff = array(
-          'office_id' => $data->office_id,
-          'username' => $data->username,
-          'email' => $data->email,
-          'password' => $data->password,
-          'firstname' => $data->firstname,
-          'middlename' => $data->middlename,
-          'lastname' => $data->lastname
+        $set = array(
+          'office_id' => $staff->office_id,
+          'username' => $staff->username,
+          'email' => $staff->email,
+          'password' => md5($staff->password),
+          'firstname' => $staff->firstname,
+          'middlename' => $staff->middlename,
+          'lastname' => $staff->lastname
         );
-        $this->db->insert('staff', $staff);
+        $this->db->insert('staff', $set);
     }
 
-    public function update(Staff $data): void
+    public function update(Staff $staff): void
     {
-        $set = 'office_id=' . $data->office_id .
-               ', username="' . $data->username .
-               '", email="' . $data->email .
-               '", password=" ' . $data->password .
-               '", firstname="' . $data->firstname .
-               '", middlename="' . $data->middlename .
-               '", lastname="' . $data->lastname . '"';
-        $this->db->update('staff', $set, 'id='.$data->id);
+        //TODO update
+        $set = 'office_id=' . $staff->office_id .
+               ', username="' . $staff->username .
+               '", email="' . $staff->email .
+               '", password=" ' . md5($staff->password) .
+               '", firstname="' . $staff->firstname .
+               '", middlename="' . $staff->middlename .
+               '", lastname="' . $staff->lastname . '"';
+        $this->db->update('staff', $set, 'id='.$staff->id);
     }
 
     public function delete($id): void

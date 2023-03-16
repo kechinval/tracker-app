@@ -60,12 +60,18 @@ class Database {
         return $this->query($sql);
     }
 
+    public function with($table, $rows = '*', $relation = null, $col1 = null, $col2 = null)
+    {
+        //TODO implement with() method
+    }
+
     public function insert($table, $values, $columns = null) {
         $sql = "INSERT INTO $table";
         if ($columns != null) {
             $columns = implode(", ", $columns);
             $sql .= " ($columns)";
         }
+        //TODO implement null values in sql query
         $values = implode("', '", $values);
         $sql .= " VALUES (DEFAULT, '$values')";
         return $this->query($sql);

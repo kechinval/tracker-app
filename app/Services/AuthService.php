@@ -1,44 +1,48 @@
 <?php
 
-require_once __DIR__.'/../../vendor/autoload.php';
+namespace App\Services;
 
-use App\Repository\SqlStaffRepository;
+use App\Core\App;
 use App\Database\Database;
+use App\Repository\SqlStaffRepository;
+use App\Models\Staff;
 
-$SqlStaffRepository = new SqlStaffRepository();
+class AuthService
+{
+    private SqlStaffRepository $sqlStaffRepository;
 
-switch (true){
-    case (isset($_POST['register'])):
-        $data = array(
-            $_POST['office_id'],
-            $_POST['username'],
-            $_POST['email'],
-            md5($_POST['password']),
-            $_POST['firstname'],
-            $_POST['middlename'],
-            $_POST['lastname']);
-        $SqlStaffRepository->save($data);
-        header("Location: ../../public/index.php");
-        break;
-    case (isset($_POST['login'])):
+    public function __construct()
+    {
+        $this->sqlStaffRepository = new SqlStaffRepository();
+    }
+
+    public function login($request)
+    {
         $db = new Database();
         $res = $db->select(
             'staff',
             '*',
-            'username="'.$_POST['username'] . '" AND password="' . md5($_POST['password']) .'"' );
+            'username="'.$request['username'] . '" AND password="' . md5($request['password']) .'"');
         $user = $res->fetch_assoc();
-        if ($user) {
-            session_start();
-            $_SESSION['id'] = $user['id'];
-            $_SESSION['session'] = md5($user['username']);
-            header("Location: ../../public/staff/index.php");
+        if (!is_null($user)) {
+            App::$app->session->set('username', $user['username']);
+            App::$app->response->redirect('/staff');
         } else {
-            header("Location: /public/index.php?error=Wrong username or password");
+            App::$app->session->setFlash('error', 'Неверный логин или пароль');
+            App::$app->response->redirect('/');
         }
-        break;
-    case (isset($_POST['logout'])):
-        session_start();
+    }
+
+    public function register($request)
+    {
+        $this->sqlStaffRepository->save($request);
+        App::$app->session->setFlash('success', 'Спасибо за регистрацию');
+        App::$app->response->redirect('/');
+    }
+
+    public function logout()
+    {
         session_destroy();
-        header("Location: /public/index.php");
-        break;
+        App::$app->response->redirect('/');
+    }
 }

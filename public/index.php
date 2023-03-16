@@ -1,33 +1,40 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>Document</title>
-</head>
-<body>
-<div class="container">
-    <?php if (isset($_GET['error'])) { ?>
-        <div class="alert alert-danger" role="alert">
-            <?php echo $_GET['error']; ?>
-        </div>
-    <?php } ?>
-    <form action="../app/Services/AuthService.php" method="POST">
-        <div class="form-group">
-            <label for="username">Email address</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-        </div>
-        <button type="submit" name="login" class="btn btn-primary">Submit</button>
-        <a class="btn btn-secondary" href="auth/register.php">Регистрация</a>
-    </form>
-</div>
-</body>
-</html>
+<?php
+
+require_once __DIR__.'/../app/bootstrap.php';
+
+use App\Core\App;
+use App\Controllers\AuthController;
+use App\Controllers\EquipmentController;
+use App\Controllers\OfficesController;
+use App\Controllers\StaffController;
+
+$app = new App();
+
+$app->router->get('/', [AuthController::class, 'login']);
+$app->router->post('/', [AuthController::class, 'login']);
+$app->router->get('/register', [AuthController::class, 'register']);
+$app->router->post('/register', [AuthController::class, 'register']);
+$app->router->get('/logout', [AuthController::class, 'logout']);
+
+$app->router->get('/staff', [StaffController::class, 'index']);
+$app->router->get('/staff/create', [StaffController::class, 'create']);
+$app->router->post('/staff/store', [StaffController::class, 'store']);
+$app->router->get('/staff/edit/{id}', [StaffController::class, 'edit']);
+$app->router->post('/staff/edit/update', [StaffController::class, 'update']);
+$app->router->get('/staff/destroy/{id}', [StaffController::class, 'destroy']);
+
+$app->router->get('/offices', [OfficesController::class, 'index']);
+$app->router->get('/offices/create/', [OfficesController::class, 'create']);
+$app->router->post('/offices/store', [OfficesController::class, 'store']);
+$app->router->get('/offices/edit/{id}', [OfficesController::class, 'edit']);
+$app->router->post('/offices/edit/update', [OfficesController::class, 'update']);
+$app->router->get('/offices/destroy/{id}', [OfficesController::class, 'destroy']);
+
+$app->router->get('/equipment', [EquipmentController::class, 'index']);
+$app->router->get('/equipment/create/', [EquipmentController::class, 'create']);
+$app->router->post('/equipment/store', [EquipmentController::class, 'store']);
+$app->router->get('/equipment/edit/{id}', [EquipmentController::class, 'edit']);
+$app->router->post('/equipment/edit/update', [EquipmentController::class, 'update']);
+$app->router->get('/equipment/destroy/{id}', [EquipmentController::class, 'destroy']);
+
+$app->run();
