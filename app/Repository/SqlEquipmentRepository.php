@@ -6,6 +6,8 @@ use App\Core\Collection;
 use App\Database\Database;
 use App\Models\Equipment;
 use App\Repository\Interfaces\EquipmentRepositoryInterface;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 
 class SqlEquipmentRepository implements EquipmentRepositoryInterface
 {
@@ -57,7 +59,17 @@ class SqlEquipmentRepository implements EquipmentRepositoryInterface
           'equipment_status' => $data->equipment_status,
           'movement_status' => $data->movement_status
         );
-        $this->db->insert('equipment', $equipment);
+        $id = $this->db->insert('equipment', $equipment);
+        $this->generateQrCode($id);
+    }
+
+    public function generateQrCode($id): void
+    {
+        $writer = new PngWriter();
+        $qrCode = new QrCode("http://localhost/equipment/{$id}");
+        $qrCode->setSize(300);
+        $result = $writer->write($qrCode);
+        $result->saveToFile(__DIR__."/../../public/img/qrcode{$id}.png");
     }
 
     public function update($data): void

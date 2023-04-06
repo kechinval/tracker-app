@@ -9,12 +9,13 @@ class Controller
     public string $action = '';
     protected array $middlewares = [];
 
-    public function view($path, $view, $params = [])
+    public function view($path, $view, $params = []): array|bool|string
     {
-        return App::$app->router->renderView($path, $view, $params);
+        $viewClass = new View();
+        return $viewClass->renderView($path, $view, $params);
     }
 
-    public function registerMiddleware(BaseMiddleware $middleware)
+    public function registerMiddleware(BaseMiddleware $middleware): void
     {
         $this->middlewares[] = $middleware;
     }

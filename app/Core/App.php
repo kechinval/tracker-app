@@ -16,20 +16,20 @@ class App
     public function __construct()
     {
         self::$app = $this;
-        $this->request = new Request();
-        $this->response = new Response();
         $this->session = new Session();
-        $this->router = new Router($this->request, $this->response);
+        $this->request = new Request();
+        $this->router = new Router($this->request);
+        $this->response = new Response($this->request, $this->router);
     }
 
-    public static function isGuest()
+    public static function isGuest(): bool
     {
         return !self::$app->session->get('username');
     }
 
-    public function run()
+    public function run(): void
     {
-        echo $this->router->resolve();
+        echo $this->response->send();
     }
 
     /**

@@ -3,6 +3,10 @@
 namespace App\Models;
 
 use App\Core\Model;
+use App\Core\Rules\RuleEmail;
+use App\Core\Rules\RuleMin;
+use App\Core\Rules\RuleRequired;
+use App\Core\Rules\RuleUniquie;
 
 class Staff extends Model {
     public int $id;
@@ -17,13 +21,13 @@ class Staff extends Model {
     public function rules(): array
     {
         return [
-            'office_id' => [self::RULE_REQUIRED],
-            'username' => [self::RULE_REQUIRED, self::RULE_UNIQUE],
-            'email' => [self::RULE_REQUIRED, self::RULE_UNIQUE, self::RULE_EMAIL],
-            'password' => [self::RULE_REQUIRED, [self::RULE_MIN, 'min' => '8']],
-            'firstname' => [self::RULE_REQUIRED],
-            'middlename' => [self::RULE_REQUIRED],
-            'lastname' => [self::RULE_REQUIRED]
+            'office_id' => [new RuleRequired()],
+            'username' => [new RuleRequired(), new RuleUniquie("username")],
+            'email' => [new RuleRequired(), new RuleUniquie("email"), new RuleEmail()],
+            'password' => [new RuleRequired(), new RuleMin(8)],
+            'firstname' => [new RuleRequired()],
+            'middlename' => [new RuleRequired()],
+            'lastname' => [new RuleRequired()]
         ];
     }
 }

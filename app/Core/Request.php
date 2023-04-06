@@ -4,7 +4,7 @@ namespace App\Core;
 
 class Request
 {
-    public function getUrl()
+    public function getUrl(): string
     {
         $path = $_SERVER['REQUEST_URI'];
         $position = strpos($path, '?');
@@ -14,23 +14,23 @@ class Request
         return $path;
     }
 
-    public function getMethod()
+    public function getMethod(): string
     {
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
 
-    public function isGet()
+    public function isGet(): bool
     {
         return $this->getMethod() === 'get';
     }
 
-    public function isPost()
+    public function isPost(): bool
     {
         return $this->getMethod() === 'post';
 
     }
 
-    public function getBody()
+    public function getBody(): array
     {
         $body = [];
 
@@ -49,7 +49,7 @@ class Request
         return $body;
     }
 
-    public function setRouteParams($params)
+    public function setRouteParams($params): Request
     {
         $this->routeParams = $params;
         return $this;

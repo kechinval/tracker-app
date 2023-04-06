@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Core\Model;
+use App\Core\Rules\RuleInt;
+use App\Core\Rules\RuleRequired;
 
 class Equipment extends Model {
 
@@ -17,12 +19,12 @@ class Equipment extends Model {
     public function rules(): array
     {
         return [
-            'staff_id' => [self::RULE_REQUIRED],
-            'office_id' => [self::RULE_REQUIRED],
-            'invNo' => [self::RULE_REQUIRED, self::RULE_INT],
-            'specs' => [self::RULE_REQUIRED],
-            'equipment_status' => [self::RULE_REQUIRED],
-            'movement_status' => [self::RULE_REQUIRED]
+            'staff_id' => [new RuleRequired()],
+            'office_id' => [new RuleRequired()],
+            'invNo' => [new RuleRequired(), new RuleInt()],
+            'specs' => [new RuleRequired()],
+            'equipment_status' => [new RuleRequired()],
+            'movement_status' => [new RuleRequired()]
         ];
     }
 }

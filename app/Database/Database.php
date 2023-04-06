@@ -74,7 +74,8 @@ class Database {
         //TODO implement null values in sql query
         $values = implode("', '", $values);
         $sql .= " VALUES (DEFAULT, '$values')";
-        return $this->query($sql);
+        $this->query($sql);
+        return $this->connection->insert_id;
     }
 
     public function update($table, $set, $where = null) {

@@ -37,6 +37,7 @@
                 <td><?= $item->equipment_status ?></td>
                 <td><?= $item->movement_status ?></td>
                 <td style="display: flex">
+                    <a class="btn btn-primary" href="equipment/<?= $item->id ?>" role="button">Подробнее</a>
                     <a class="btn btn-primary" href="equipment/edit/<?= $item->id ?>" role="button">Изменить</a>
                     <a class="btn btn-danger" href="equipment/destroy/<?= $item->id ?>" role="button">Удалить</a>
                 </td>

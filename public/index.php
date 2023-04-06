@@ -32,6 +32,7 @@ $app->router->get('/offices/destroy/{id}', [OfficesController::class, 'destroy']
 
 $app->router->get('/equipment', [EquipmentController::class, 'index']);
 $app->router->get('/equipment/create/', [EquipmentController::class, 'create']);
+$app->router->get('/equipment/{id}', [EquipmentController::class, 'show']);
 $app->router->post('/equipment/store', [EquipmentController::class, 'store']);
 $app->router->get('/equipment/edit/{id}', [EquipmentController::class, 'edit']);
 $app->router->post('/equipment/edit/update', [EquipmentController::class, 'update']);

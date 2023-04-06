@@ -33,6 +33,18 @@ class EquipmentController extends Controller
         ]);
     }
 
+    public function show(Request $request)
+    {
+        $equipment = (new SqlEquipmentRepository())->getById($request->getRouteParams()['id']);
+        $office = (new SqlOfficesRepository())->getById($equipment->office_id);
+        $staff = (new SqlStaffRepository())->getById($equipment->staff_id);
+        return $this->view('equipment', 'show', [
+            'equipment' => $equipment,
+            'office' => $office,
+            'staff' => $staff
+        ]);
+    }
+
     public function create()
     {
         return $this->view('equipment', 'create', [
@@ -89,6 +101,7 @@ class EquipmentController extends Controller
 
     public function destroy(Request $request)
     {
+        unlink(__DIR__."/../../public/img/qrcode{$request->getRouteParams()['id']}.png");
         $this->equipmentService->delete($request->getRouteParams()['id']);
     }
 }

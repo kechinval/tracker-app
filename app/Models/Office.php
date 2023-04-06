@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Core\Model;
+use App\Core\Rules\RuleInt;
+use App\Core\Rules\RuleRequired;
 
 class Office extends Model {
     public int $id;
@@ -13,8 +15,8 @@ class Office extends Model {
     public function rules(): array
     {
         return [
-            'address' => [self::RULE_REQUIRED],
-            'numbers_of_workspaces' => [self::RULE_REQUIRED, self::RULE_INT]
+            'address' => [new RuleRequired()],
+            'numbers_of_workspaces' => [new RuleRequired(), new RuleInt()]
         ];
     }
 }

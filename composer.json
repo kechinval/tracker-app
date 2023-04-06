@@ -11,5 +11,7 @@
             "email": "vladislav.lavnichek@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "endroid/qr-code": "^4.8"
+    }
 }

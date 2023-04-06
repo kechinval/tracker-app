@@ -11,7 +11,7 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
 
     }
 
-    public static function make(array $items)
+    public static function make(array $items): Collection
     {
         return new static($items);
     }
